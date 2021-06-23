@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brightness blyat</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2de1a056cc.js"></script>
+</head>
+<body>
+<button onclick="incBrightness()">+</button>
+<button onclick="decBrightness()">-</button>
+
+<label for="brightness" class="fas fa-sun"></label>
+<input type="range" step="5" id="brightness" min="0" max="100" onchange="setBrightness()">
+
+<script lang="js">
+    let b;
+
+    const client = new XMLHttpRequest();
+    client.open("GET", "/brits/get", false);
+    client.send();
+
+    b = JSON.parse(client.response);
+    document.getElementById("brightness").value = (100 * b["brightness"]) / b["max"]
+
+    console.log("b", b)
+
+    function setBrightness() {
+        fetch(`/brits/set?b=${document.getElementById("brightness").value}`, {
+            method: "GET",
+            mode: "cors"
+        })
+    }
+
+    function decBrightness() {
+        fetch("/brits/dec", {
+            method: "GET"
+        })
+    }
+
+    function incBrightness() {
+        fetch("/brits/inc", {
+            method: "GET"
+        })
+    }
+</script>
+</body>
+</html>
