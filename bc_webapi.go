@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -18,10 +19,12 @@ func NewBCWebAPI(bc *BrightnessController) *BCWebAPI {
 
 func (bapi *BCWebAPI) initEndPoints() *BCWebAPI {
 	bapi.endPoints = map[string]http.HandlerFunc{
-		"GET /dec": bapi.handleDecBrightness,
-		"GET /inc": bapi.handleIncBrightness,
-		"GET /get": bapi.handleGetBrightness,
-		"GET /set": bapi.handleSetBrightness,
+		"GET /dec":        bapi.handleDecBrightness,
+		"GET /inc":        bapi.handleIncBrightness,
+		"GET /get":        bapi.handleGetBrightness,
+		"GET /set":        bapi.handleSetBrightness,
+		"GET /devices":    bapi.handleGetDevices,
+		"GET /set_device": bapi.handleSetDevice,
 	}
 	return bapi
 }
@@ -33,6 +36,7 @@ func (bapi *BCWebAPI) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Access-Control-Allow-Origin", "*")
 	res.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
+	fmt.Println(req.Method + " " + req.URL.Path)
 	if handler, ok := bapi.endPoints[req.Method+" "+strings.TrimPrefix(req.URL.Path, "/brits")]; ok {
 		handler(res, req)
 		return
@@ -74,4 +78,16 @@ func (bapi *BCWebAPI) handleSetBrightness(res http.ResponseWriter, req *http.Req
 		return
 	}
 	res.WriteHeader(400)
+}
+
+func (bapi *BCWebAPI) handleGetDevices(res http.ResponseWriter, req *http.Request) {
+	json.NewEncoder(res).Encode(map[string]interface{}{
+		"devices": bapi.bc.GetDevices(),
+	})
+}
+
+func (bapi *BCWebAPI) handleSetDevice(res http.ResponseWriter, req *http.Request) {
+	if device, ok := req.URL.Query()["device"]; ok {
+		bapi.bc.SelectDevice(device[0])
+	}
 }

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brightness blyat</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2de1a056cc.js"></script>
+</head>
+
+<body>
+<label for="devices" >select device:</label>
+<select id="devices" onclick="setDevice()">
+</select>
+<br/>
+<button onclick="decBrightness()">-</button>
+<button onclick="incBrightness()">+</button>
+
+<label for="brightness" class="fas fa-sun"></label>
+<input type="range" step="1" id="brightness" min="0" max="100" onchange="setBrightness()">
+
+<script lang="js" src="code.js">
+</script>
+</body>
+</html>

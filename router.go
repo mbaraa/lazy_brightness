@@ -15,7 +15,7 @@ func NewRouter(bcAPI *BCWebAPI) *Router {
 }
 
 func (r *Router) initEndPoints(bcApi *BCWebAPI) *Router {
-	r.handler.Handle("/", http.FileServer(http.Dir(".")))
+	r.handler.Handle("/", http.FileServer(http.Dir("public")))
 	r.handler.Handle("/brits/", bcApi)
 	return r
 }
