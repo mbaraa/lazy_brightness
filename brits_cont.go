@@ -20,7 +20,8 @@ func getBacklightDevices() ([]string, error) {
 		return nil, err
 	}
 
-	return strings.Split(string(op), " "), nil
+	op = []byte(strings.Trim(string(op), "\n\r"))
+	return strings.Split(string(op), "\n"), nil
 }
 
 type BrightnessController struct {
@@ -35,13 +36,6 @@ func NewBrightnessController() *BrightnessController {
 		return nil
 	}
 
-	for dIndex, dName := range devices {
-		devices[dIndex] = strings.Trim(dName, "\n\r")
-	}
-	fmt.Println(BrightnessController{
-		devices:       devices,
-		currentDevice: devices[0],
-	})
 	return &BrightnessController{
 		devices:       devices,
 		currentDevice: devices[0],

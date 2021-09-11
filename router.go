@@ -23,13 +23,13 @@ func (r *Router) initEndPoints(bcApi *BCWebAPI) *Router {
 func (r *Router) Start() {
 	log.Printf("running server on http://%s", r.getMachineIP())
 	log.Fatalln(
-		http.ListenAndServe(":80", r.handler),
+		http.ListenAndServe(":9876", r.handler),
 	)
 }
 
 // Get preferred outbound ip of this machine
 func (r *Router) getMachineIP() string {
-	conn, err := net.Dial("udp", "8.8.8.8:80")
+	conn, err := net.Dial("udp", "8.8.8.8:9876")
 	if err != nil {
 		log.Fatal(err)
 	}
